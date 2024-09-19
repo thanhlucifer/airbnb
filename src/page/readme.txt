@@ -1,0 +1,1 @@
+Contains files representing the pages contained in the project.

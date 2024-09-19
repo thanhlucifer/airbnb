@@ -1,0 +1,1 @@
+Contains common structural templates in the project, for example the home page and subpages will always have a header and footer

@@ -1,0 +1,1 @@
+Contains functions that are reused in the project. For example, if you create a learning page that needs to check deadlines in many places, you will create a separate function to check deadlines.
