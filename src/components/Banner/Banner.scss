@@ -1,0 +1,14 @@
+.banner {
+    background-image: url('../../assets/banner.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 500px;
+    width: 100%;
+}
+
+h2 {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+  }
