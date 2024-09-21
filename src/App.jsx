@@ -1,11 +1,20 @@
-
+import Banner from "./components/Banner/Banner"
+import Header from "./components/Header/Header"
 
 
 function App() {
 
 
   return (
-    <div className="text-red-500">Template Reactjs v18</div>
+    <div className="h-[1000000px]">
+      {/* Haeder */}
+      <Header />
+      <Banner />
+      {/* filter */}
+      {/* Rental */}
+      {/* Footer */}
+      
+    </div>
   )
 }
 

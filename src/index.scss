@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+:root {
+    --red: #e0565b;
+    --yellow: #ffffd6;
+    --dark: #2e2e48;
+    --brown: #3f3f1a;
+    --light: #fafafc;
+    --gray: #efeff5;
+    --white: #fff;
+    --sidePadding: 3rem;
+    --maxWidth: 40%;
+    --containerWidth: 1200px;
+  }
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
