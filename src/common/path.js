@@ -3,4 +3,5 @@ export const path = {
     pagenotfound: '*',
     signin: '/signin',
     signup: '/signup',
+    phongthue: '/phong-thue/:id',
 }
