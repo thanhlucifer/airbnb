@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { phongthueService } from '../../service/phongthue.service';
 import MapComponent from '../../components/MapBox/MapComponent';
-import { FaStar, FaAngleRight , FaAngleLeft, FaRegClipboard, FaMapMarkerAlt  } from "react-icons/fa";
-import { Marker } from 'react-map-gl';
+import { FaStar  } from "react-icons/fa";
+import './Rental.scss'
 const RentalRoomList = () => {
   const { id } = useParams();  // Get the location ID from the URL
   const [rooms, setRooms] = useState([]);
@@ -37,7 +37,7 @@ const RentalRoomList = () => {
     <>
 
         <div className={`${!isFullMap && 'lg:grid-cols-[700px,1fr] xl:grid-cols-[840px,1fr]'
-          } flex-grow grid grid-cols-1 mt-[40px] duration-500`}>
+          } flex-grow grid grid-cols-1 mt-[40px] duration-500 rental`}>
           {/* left - cards */}
           <div
             className={`${isFullMap && 'hidden'}  px-4 py-8 duration-500 lg:py-12 lg:px-7`}
