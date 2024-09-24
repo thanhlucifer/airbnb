@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { phongthueService } from '../../service/phongthue.service';
+import { binhluanService } from '../../service/binhluan.service';
 import { FaStar, FaRegHeart, FaRegCalendar, FaChevronRight } from "react-icons/fa";
 import { RiMedal2Fill } from "react-icons/ri";
 import { FiUpload } from "react-icons/fi";
@@ -12,11 +13,16 @@ import { TbIroningSteam, TbIroning, TbAirConditioning, TbParkingCircle, TbPool, 
 import { GiWashingMachine } from "react-icons/gi";
 
 const RoomDetail = () => {
-    const { id } = useParams();  // Get the room ID from the URL
+    const { id } = useParams();  
     const [roomDetail, setRoomDetail] = useState(null);
+    const [comments, setComments] = useState([]);  
+    const [visibleComments, setVisibleComments] = useState(4); 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isFullMap, setIsFullMap] = useState(false);
+    const [newComment, setNewComment] = useState(""); 
+    const [newRating, setNewRating] = useState(0); 
+    const [visibleCount, setVisibleCount] = useState(6); 
     useEffect(() => {
         setLoading(true);
         phongthueService.layChiTietPhong(id)
@@ -28,6 +34,13 @@ const RoomDetail = () => {
                 setError("Error fetching room details.");
                 setLoading(false);
             });
+        binhluanService.getBinhluantheophong(id)
+            .then(response => {
+                setComments(response.data.content);  
+            })
+            .catch(error => {
+                setError("Error fetching comments.");
+            });
     }, [id]);
 
     if (loading) {
@@ -37,6 +50,56 @@ const RoomDetail = () => {
     if (error) {
         return <div>{error}</div>;
     }
+
+    const amenities = [
+        roomDetail.banLa && <div className='flex items-center space-x-3'><TbIroningSteam className='w-8 h-8' /> <span>Bàn là</span></div>,
+        roomDetail.banUi && <div className='flex items-center space-x-3'><TbIroning className='w-8 h-8' /> <span>Bàn ủi</span></div>,
+        roomDetail.wifi && <div className='flex items-center space-x-3'><TbWifi className='w-8 h-8' /> <span>Wifi</span></div>,
+        roomDetail.dieuHoa && <div className='flex items-center space-x-3'><TbAirConditioning className='w-8 h-8' /> <span>Điều hòa nhiệt độ</span></div>,
+        roomDetail.tivi && <div className='flex items-center space-x-3'><TbDeviceTv className='w-8 h-8' /> <span>Tivi với truyền hình cáp siêu chuẩn</span></div>,
+        roomDetail.bep && <div className='flex items-center space-x-3'><TbToolsKitchen className='w-8 h-8' /> <span>Bếp</span></div>,
+        roomDetail.mayGiat && <div className='flex items-center space-x-3'><GiWashingMachine className='w-8 h-8' /> <span>Máy giặt</span></div>,
+        roomDetail.doXe && <div className='flex items-center space-x-3'><TbParkingCircle className='w-8 h-8' /> <span>Bãi đỗ xe thu phí</span></div>,
+        roomDetail.hoBoi && <div className='flex items-center space-x-3'><TbPool className='w-8 h-8' /> <span>Hồ bơi</span></div>,
+    ].filter(Boolean); 
+
+    const handleShowMoreTienNghi = () => {
+        setVisibleCount(prevCount => prevCount + 6); 
+    };
+
+    const handleShowMore = () => {
+        setVisibleComments((prev) => prev + 4);
+    };
+
+    const handleCommentChange = (e) => {
+        setNewComment(e.target.value);
+    };
+
+    const handleRatingChange = (e) => {
+        setNewRating(e.target.value);
+    };
+
+    const handleSubmitComment = (e) => {
+        e.preventDefault();
+        const commentData = {
+            maPhong: id,
+            maNguoiBinhLuan: 1,
+            ngayBinhLuan: new Date().toISOString(),
+            noiDung: newComment,
+            saoBinhLuan: newRating,
+        };
+
+        binhluanService.postBinhluan(commentData)
+            .then(response => {
+                setComments([response.data.content, ...comments]);
+                setNewComment("");
+                setNewRating(0);
+            })
+            .catch(error => {
+                console.error("Error posting comment:", error);
+            });
+    };
+
 
     return (
         <>
@@ -131,33 +194,75 @@ const RoomDetail = () => {
                     <div className='py-5 border-b border-gray-300 space-y-4'>
                         <h1 className="text-2xl font-semibold">Tiện nghi</h1>
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                            {[
-                                roomDetail.banLa && <div className='flex items-center space-x-3'><TbIroningSteam className='w-8 h-8' /> <span>Bàn là</span></div>,
-                                roomDetail.banUi && <div className='flex items-center space-x-3'><TbIroning className='w-8 h-8' /> <span>Bàn ủi</span></div>,
-                                roomDetail.wifi && <div className='flex items-center space-x-3'><TbWifi className='w-8 h-8' /> <span>Wifi</span></div>,
-                                roomDetail.dieuHoa && <div className='flex items-center space-x-3'><TbAirConditioning className='w-8 h-8' /> <span>Điều hòa nhiệt độ</span></div>,
-                                roomDetail.tivi && <div className='flex items-center space-x-3'><TbDeviceTv className='w-8 h-8' /> <span>Tivi với truyền hình cáp siêu chuẩn</span></div>,
-                                roomDetail.bep && <div className='flex items-center space-x-3'><TbToolsKitchen className='w-8 h-8' /> <span>Bếp</span></div>,
-                                roomDetail.mayGiat && <div className='flex items-center space-x-3'><GiWashingMachine className='w-8 h-8' /> <span>Máy giặt</span></div>,
-                                roomDetail.doXe && <div className='flex items-center space-x-3'><TbParkingCircle className='w-8 h-8' /> <span>Bãi đỗ xe thu phí</span></div>,
-                                roomDetail.hoBoi && <div className='flex items-center space-x-3'><TbPool className='w-8 h-8' /> <span>Hồ bơi  </span></div>,
-                            ]}
-                            <div className='flex '>
-                                <button className="border border-black text-black px-4 py-2 rounded-md">Xem thêm</button>
-                            </div>
+                            {amenities.slice(0, visibleCount)} 
+                            {visibleCount < amenities.length && ( 
+                                <div className='flex '>
+                                    <button className="border border-black text-black px-4 py-2 rounded-md" onClick={handleShowMoreTienNghi}>Xem thêm</button>
+                                </div>
+                            )}
                         </div>
+                    </div>
+                    <div className='py-5 border-b border-gray-300 space-y-4'>
+                        {/* Bình luận */}
+                        <h2 className="text-2xl font-bold">Bình luận</h2>
+                        {comments.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {comments.slice(0, visibleComments).map(comment => (
+                                    <div key={comment.id} className="py-4 ">
+                                        <div className="flex items-center space-x-4">
+                                            <img src={comment.avatar || avatar} alt={comment.tenNguoiBinhLuan} className="w-10 h-10 rounded-full border border-gray-300" />
+                                            <div>
+                                                <h4 className="font-semibold">{comment.tenNguoiBinhLuan}</h4>
+                                                <p className="text-sm text-gray-600">{comment.ngayBinhLuan}</p>
+                                            </div>
+                                        </div>
+                                        <p className="mt-2">{comment.noiDung}</p>
+                                        <div className="flex items-center mt-2">
+                                            <FaStar className="text-yellow-500" />
+                                            <span className="ml-1">{comment.saoBinhLuan}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p>Chưa có bình luận nào.</p>
+                        )}
+                        {visibleComments < comments.length && (
+                            <button
+                                onClick={handleShowMore}
+                                className="mt-4 text-black underline flex items-center font-semibold"
+                            >
+                                Hiển thị thêm <FaChevronRight />
+                            </button>
+                        )}
+                    </div>
+                    {/* Form để thêm bình luận */}
+                    <div className='py-5 border-b border-gray-300 hidden sm:block'>
+                        <h2 className="text-2xl font-bold mb-4">Thêm bình luận</h2>
+                        <form onSubmit={handleSubmitComment} className="space-y-4">
+                            <textarea
+                                value={newComment}
+                                onChange={handleCommentChange}
+                                placeholder="Nhập bình luận của bạn..."
+                                className="w-full p-2 border rounded"
+                                required
+                            />
+                            <div>
+                                <label className="block font-semibold">Đánh giá:</label>
+                                <select value={newRating} onChange={handleRatingChange} className="border rounded p-2">
+                                    <option value={0}>Chọn sao</option>
+                                    {[1, 2, 3, 4, 5].map(star => (
+                                        <option key={star} value={star}>{star} sao</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">Gửi bình luận</button>
+                        </form>
                     </div>
                 </div>
             </div>
 
         </>
-        // <div className="room-detail">
-        //   <h1>{roomDetail.tenPhong}</h1>
-        //   <img src={roomDetail.hinhAnh} alt={roomDetail.tenPhong} />
-        //   <p>Guests: {roomDetail.khach}</p>
-        //   <p>Price: ${roomDetail.giaTien} / month</p>
-        //   {/* Add other details as necessary */}
-        // </div>
     );
 };
 
