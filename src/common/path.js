@@ -3,5 +3,6 @@ export const path = {
     pagenotfound: '*',
     signin: '/signin',
     signup: '/signup',
-    phongthue: '/phong-thue/:id',
+    listphong: '/list-phong/:id',
+    chitietphong: '/chitiet-phong/:id',
 }

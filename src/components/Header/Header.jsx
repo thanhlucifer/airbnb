@@ -38,7 +38,7 @@ const Header = () => {
   };
 
   const handleSearch = (id) => {
-    navigate(`/phong-thue/${id}`);
+    navigate(`/list-phong/${id}`);
   };
   
 

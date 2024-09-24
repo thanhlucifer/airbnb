@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { phongthueService } from '../../service/phongthue.service';
 import MapComponent from '../../components/MapBox/MapComponent';
 import { FaStar  } from "react-icons/fa";
-import './Rental.scss'
+
 const RentalRoomList = () => {
   const { id } = useParams();  // Get the location ID from the URL
   const [rooms, setRooms] = useState([]);
@@ -11,6 +11,7 @@ const RentalRoomList = () => {
   const [error, setError] = useState(null);  // State for error handling
   const [isFullMap, setIsFullMap] = useState(false);
   const [map, setMap] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     setLoading(true);
     phongthueService.layphongthueVitri(id)
@@ -32,12 +33,15 @@ const RentalRoomList = () => {
   if (error) {
     return <div>{error}</div>;  // Display error message if fetching fails
   }
+  const handleRoomClick = (roomId) => {
+    navigate(`/chitiet-phong/${roomId}`);  // Điều hướng đến trang chi tiết phòng
+  };
 
   return (
     <>
 
         <div className={`${!isFullMap && 'lg:grid-cols-[700px,1fr] xl:grid-cols-[840px,1fr]'
-          } flex-grow grid grid-cols-1 mt-[40px] duration-500 rental`}>
+          } flex-grow grid grid-cols-1 mt-[40px] duration-500`}>
           {/* left - cards */}
           <div
             className={`${isFullMap && 'hidden'}  px-4 py-8 duration-500 lg:py-12 lg:px-7`}
@@ -70,7 +74,7 @@ const RentalRoomList = () => {
             {/* list */}
             <section>
               {rooms.map(room => (
-                <div className='grid sm:grid-cols-[300px,1fr] py-5 border-gray-200 cursor-pointer sm:border-t grid-cols-1 gap-x-4'>
+                <div className='grid sm:grid-cols-[300px,1fr] py-5 border-gray-200 cursor-pointer sm:border-t grid-cols-1 gap-x-4' onClick={() => handleRoomClick(room.id)}>
                   <div className='relative w-full mb-2 md:mb-0 sm:h-44 h-52'>
                     <img
                       src={room.hinhAnh}

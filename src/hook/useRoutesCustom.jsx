@@ -4,6 +4,7 @@ import UserTemplate from '../template/UserTemplate/UserTemplate';
 import {path} from '../common/path';
 import RentalRoomList from '../page/RentalRoomList/RentalRoomList ';
 import DefaultPage from '../page/DefaultPage/DefaultPage';
+import RoomDetail from '../page/RoomDetail/RoomDetail';
 const PageNotFound = React.lazy(() => import('../components/PageNotFound/PageNotFound'));
 
 const useRoutesCustom = () => {
@@ -17,9 +18,14 @@ const useRoutesCustom = () => {
                     element: <DefaultPage/>,
                 },
                 {
-                    path: path.phongthue,
+                    path: path.listphong,
                     element: <RentalRoomList/> 
                 },
+                {
+                    path: path.chitietphong,
+                    element: <RoomDetail/>
+                }
+                
             ]
         },
     ]);
