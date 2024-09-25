@@ -4,16 +4,88 @@ import { MdLanguage, MdOutlineSearch } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaUserCircle } from "react-icons/fa";
 import { viTriService } from '../../service/viTri.service';  // Import your location service
-import { useNavigate } from 'react-router-dom';  // If using React Router for navigation
+import { Link, useNavigate } from 'react-router-dom';  // If using React Router for navigation
 import './Header.scss';
-
+import { logout } from '../../redux/authSlide'
+import { useSelector, useDispatch } from 'react-redux'
+import { Dropdown, Avatar } from 'antd';
+import { CiLogout } from "react-icons/ci";
+import { path } from '../../common/path'
 const Header = () => {
   const [searchInput, setSearchInput] = useState('');
-  const [locations, setLocations] = useState([]);  // Store matching locations
+  const [locations, setLocations] = useState([]);  
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const navigate = useNavigate();  // Use this for navigation to another page
+  const navigate = useNavigate();  
+  const { infoUser } = useSelector((state) => state.authSlide)
+  const dispatch = useDispatch()
+  const handleLogout = () => {
+    dispatch(logout())
+  }
+// Menu khi chưa đăng nhập
+const guestMenuItems = [
+  {
+    label: <Link to={path.signin} className='flex space-x-2 items-center'>Đăng nhập</Link>,
+    key: '0',
+  },
+  {
+    label: <Link to={path.signup} className='flex space-x-2 items-center'>Đăng ký</Link>,
+    key: '1',
+  },
+];
 
-  // Fetch all locations (you could also debounce this for better UX)
+// Menu khi đã đăng nhập
+const userMenuItems = [
+  {
+    label: <Link className='flex space-x-2 items-center'><FaUserCircle /> <span>Thông tin cá nhân</span></Link>,
+    key: '0',
+  },
+  {
+    label: <Link onClick={handleLogout} className='flex space-x-2 items-center'><CiLogout /> <span>Đăng xuất</span></Link>,
+    key: '1',
+  },
+];
+
+const checkuserLogin = () => {
+  if (infoUser) {
+    // Khi đã đăng nhập
+    return (
+      <div className="flex items-center space-x-2">
+        {/* Dropdown thông tin người dùng */}
+        <Dropdown
+          menu={{ items: userMenuItems }}
+          trigger={['click']}
+        >
+          <Avatar style={{
+            backgroundColor: '#7265e6',
+            verticalAlign: 'middle',
+            cursor: 'pointer',
+          }}
+            size="large">{infoUser.user.name.charAt(0).toUpperCase()}</Avatar>
+        </Dropdown>
+      </div>
+    );
+  } else {
+    // Khi chưa đăng nhập
+    return (
+      <div className="flex items-center space-x-2">
+        {/* Dropdown cho đăng nhập/đăng ký */}
+        <Dropdown
+          menu={{ items: guestMenuItems }}
+          trigger={['click']}
+        >
+          <div className="flex items-center space-x-2 cursor-pointer">
+            <GiHamburgerMenu className="h-6" />
+            <FaUserCircle className="h-6" />
+          </div>
+        </Dropdown>
+      </div>
+    );
+  }
+}
+
+
+
+  
   useEffect(() => {
     if (searchInput) {
       viTriService.getAllVitri()
@@ -87,8 +159,7 @@ const Header = () => {
         <p className="cursor-pointer hidden md:inline">Become a host</p>
         <MdLanguage className="h-6 cursor-pointer" />
         <div className="flex items-center space-x-2 border rounded-full px-4 py-4 hover:shadow-md transition-all">
-          <GiHamburgerMenu className="h-6" />
-          <FaUserCircle className="h-6" />
+            {checkuserLogin()}
         </div>
       </div>
     </header>
