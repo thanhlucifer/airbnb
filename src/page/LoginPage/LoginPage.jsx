@@ -41,20 +41,38 @@ const LoginPage = () => {
   });
   
   return (
-    <div>
-      <div className='flex items-center h-screen'>
-        <div className='loginpage_content w-full'>
-          <form className='space-y-5' onSubmit={handleSubmit}>
-            <h1 className="text-3xl font-bold">Login</h1>
-            <InputCustom lablecontent="Email" placeholder="Vui long nhap email" onChange={handleChange} value={values.email} name={'email'} error={errors.email} touched={touched} handleBlur={handleBlur} />
-            <InputCustom lablecontent="Password" placeholder="Vui long nhap password" typeInput='password' onChange={handleChange} value={values.password} name={'password'} error={errors.password} touched={touched} handleBlur={handleBlur} />
-            <div>
-              <button type="submit" className="inline-block w-full bg-black text-white py-2 px-5 rounded-md font-bold">Login</button>
-              <Link className='mt-3 text-blue-500 inline-block hover:underline duration-300' to={path.signup}>Chua co tai khoan, bam vao day</Link>
-            </div>
-          </form>
+    <div className="min-h-screen flex items-center justify-center container mx-auto">
+    <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-xl">
+      <form className='space-y-5' onSubmit={handleSubmit}>
+        <h1 className="text-3xl font-bold text-center">Login</h1>
+        <InputCustom 
+          lablecontent="Email" 
+          placeholder="Vui lòng nhập email" 
+          onChange={handleChange} 
+          value={values.email} 
+          name={'email'} 
+          error={errors.email} 
+          touched={touched.email} 
+          handleBlur={handleBlur} 
+        />
+        <InputCustom 
+          lablecontent="Password" 
+          placeholder="Vui lòng nhập password" 
+          typeInput='password' 
+          onChange={handleChange} 
+          value={values.password} 
+          name={'password'} 
+          error={errors.password} 
+          touched={touched.password} 
+          handleBlur={handleBlur} 
+        />
+        <div>
+          <button type="submit" className="inline-block w-full bg-[#F72F5B] text-white py-2 px-5 rounded-md font-bold">Login</button>
+          <Link className='mt-3 text-gray-500 inline-block hover:underline duration-300' to={path.signup}>Don't have an account? Press to here</Link>
         </div>
-      </div></div>
+      </form>
+    </div>
+  </div>
   )
 }
 
