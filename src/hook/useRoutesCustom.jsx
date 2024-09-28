@@ -7,6 +7,7 @@ import DefaultPage from '../page/DefaultPage/DefaultPage';
 import RoomDetail from '../page/RoomDetail/RoomDetail';
 import LoginPage from '../page/LoginPage/LoginPage';
 import RegisterPage from '../page/RegisterPage/RegisterPage';
+import Profile from '../page/ProfilePage/Profile';
 const PageNotFound = React.lazy(() => import('../components/PageNotFound/PageNotFound'));
 
 const useRoutesCustom = () => {
@@ -35,6 +36,10 @@ const useRoutesCustom = () => {
                     path: path.signup,
                     element: <RegisterPage />
                 },
+                {
+                    path: path.profile,
+                    element: <Profile/>
+                }
                 
             ]
         },

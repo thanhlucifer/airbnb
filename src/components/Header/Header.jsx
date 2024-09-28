@@ -36,7 +36,7 @@ const Header = () => {
   // Menu khi đã đăng nhập
   const userMenuItems = [
     {
-      label: <Link className='flex space-x-2 items-center'><FaUserCircle /> <span>Thông tin cá nhân</span></Link>,
+      label: <Link className='flex space-x-2 items-center' to={path.profile}><FaUserCircle /> <span>Thông tin cá nhân</span></Link>,
       key: '0',
     },
     {
@@ -60,7 +60,7 @@ const Header = () => {
               verticalAlign: 'middle',
               cursor: 'pointer',
             }}
-              size="small">{infoUser.user.name.charAt(0).toUpperCase()}</Avatar>
+              size="small">{infoUser.user?.name.charAt(0).toUpperCase()}</Avatar>
           </Dropdown>
         </div>
       );
@@ -162,7 +162,7 @@ const Header = () => {
 
       {/* right */}
       <div className="flex space-x-4 items-center justify-end text-gray-500">
-        <p className="cursor-pointer hidden md:inline">Become a host</p>
+        <p className="cursor-pointer hidden md:inline">Đón tiếp khách</p>
         <MdLanguage className="h-6 cursor-pointer" />
         <div className="flex items-center space-x-2 border rounded-full px-4 py-4 hover:shadow-md transition-all">
           {checkuserLogin()}

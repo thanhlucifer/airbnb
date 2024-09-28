@@ -6,5 +6,13 @@ export const datphongService = {
     },
     checkPhong: () => {
         return http.get('/dat-phong')
-    }
+    },
+    layPhongTheoNguoiDung: (id) => {
+        return http.get(`/dat-phong/lay-theo-nguoi-dung/${id}`);
+    },
+
+    getAllphong: () => {
+        return http.get('/phong-thue');
+    },
+ 
 }

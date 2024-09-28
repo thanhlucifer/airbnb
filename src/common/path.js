@@ -5,4 +5,5 @@ export const path = {
     signup: '/signup',
     listphong: '/list-phong/:id',
     chitietphong: '/chitiet-phong/:id',
+    profile: '/profile',
 }
