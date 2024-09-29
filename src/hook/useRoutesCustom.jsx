@@ -23,7 +23,7 @@ const useRoutesCustom = () => {
             element: <UserTemplate />,
             children: [
                 {
-                    index: '/',
+                    index: true,
                     element: <Suspense fallback={<Skeleton />}><DefaultPage /></Suspense>,
                 },
                 {
@@ -58,7 +58,7 @@ const useRoutesCustom = () => {
             element: <AdminTemplate/>,
             children: [
                 {
-                    index: '/',
+                    index: true,
                     element: <Suspense fallback={<Skeleton />}><ManagerUser /></Suspense>
                 },
                 {
