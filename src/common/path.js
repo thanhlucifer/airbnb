@@ -6,4 +6,5 @@ export const path = {
     listphong: '/list-phong/:id',
     chitietphong: '/chitiet-phong/:id',
     profile: '/profile',
+    admin: '/admin',
 }
