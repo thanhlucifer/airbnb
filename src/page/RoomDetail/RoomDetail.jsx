@@ -72,18 +72,35 @@ const RoomDetail = () => {
 
     const handleBookingSubmit = (e) => {
         e.preventDefault();
-
+    
         if (!infoUser) {
             setBookingError('Bạn cần đăng nhập để đặt phòng.');
             return;
         }
-
-        const roomExists = bookedRooms.some((room) => room.maPhong === roomDetail.id);
+    
+        // Kiểm tra xem phòng đã được đặt trước đó chưa
+        const roomExists = bookedRooms.some((room) => {
+            // So sánh ID của phòng
+            if (room.maPhong === roomDetail.id) {
+                // Kiểm tra ngày đặt hiện tại không trùng với khoảng thời gian đã đặt trước đó
+                const currentStartDate = new Date(startDate);
+                const currentEndDate = new Date(endDate);
+                const bookedStartDate = new Date(room.ngayDen);
+                const bookedEndDate = new Date(room.ngayDi);
+    
+                // Nếu ngày đến hoặc ngày đi trùng thì không cho đặt phòng
+                return (
+                    (currentStartDate <= bookedEndDate && currentEndDate >= bookedStartDate)
+                );
+            }
+            return false;
+        });
+    
         if (roomExists) {
-            setBookingError('Phòng này đã được đặt trước đó.');
+            setBookingError('Phòng này đã được đặt trong khoảng thời gian này.');
             return;
         }
-
+    
         const bookingData = {
             maPhong: roomDetail.id,
             ngayDen: startDate,
@@ -91,9 +108,9 @@ const RoomDetail = () => {
             soLuongKhach: numGuests,
             maNguoiDung: infoUser.user.id,
         };
-
+    
         setIsBooking(true);
-
+    
         datphongService.postDatphong(bookingData)
             .then((response) => {
                 showNotification('Đặt phòng thành công', 'success');
@@ -107,6 +124,7 @@ const RoomDetail = () => {
                 setIsBooking(false);
             });
     };
+    
     if (loading) {
         return <div>Loading...</div>;
     }
