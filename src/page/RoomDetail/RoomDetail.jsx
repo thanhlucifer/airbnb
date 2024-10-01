@@ -74,7 +74,7 @@ const RoomDetail = () => {
         e.preventDefault();
     
         if (!infoUser) {
-            setBookingError('Bạn cần đăng nhập để đặt phòng.');
+            showNotification('Bạn cần đăng nhập để đặt phòng!!!', 'error');
             return;
         }
     
@@ -97,7 +97,7 @@ const RoomDetail = () => {
         });
     
         if (roomExists) {
-            setBookingError('Phòng này đã được đặt trong khoảng thời gian này.');
+            showNotification('Phòng này đã được đặt trong khoảng thời gian này!!!', 'error');
             return;
         }
     
