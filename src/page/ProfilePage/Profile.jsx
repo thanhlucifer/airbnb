@@ -10,11 +10,36 @@ import { NotificationContext } from '../../App';
 const Profile = () => {
     const dispatch = useDispatch();
     const infoUser = useSelector((state) => state.authSlide.infoUser);
+    const tokenUser = useSelector(state => state.authSlide.infoUser?.token);
     const [userDetails, setUserDetails] = useState(infoUser);
     const [bookedRooms, setBookedRooms] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [allRooms, setAllRooms] = useState([]);
     const { showNotification } = useContext(NotificationContext);
+    const [isUploading, setIsUploading] = useState(false); // Trạng thái để quản lý hiển thị mục upload
+    
+
+    const [file, setFile] = useState(null);
+
+    const handleUpload = () => {
+        console.log(file); // In giá trị file ra console để kiểm tra
+        if (!file) {
+            showNotification('Vui lòng chọn file avatar!', 'warning');
+            return; // Ngừng thực thi nếu không có file
+        }
+
+        nguoidungService.uploadAvatar(tokenUser, file)
+            .then((res) => {
+                showNotification('Upload avatar thành công', 'success');
+                dispatch(getInfoUSer(userDetails));
+            })
+            .catch((err) => {
+                console.log(err);
+                showNotification('Upload avatar thất bị', 'error');
+            });
+    };
+
+
 
     useEffect(() => {
         if (infoUser?.user?.id) {
@@ -69,25 +94,56 @@ const Profile = () => {
                     alt="Avatar"
                     className="w-24 h-24 rounded-full mx-auto"
                 />
-                <h2 className="text-center mt-4 text-xl underline">
-                    Cập nhật ảnh
-                </h2>
+                <div className=''>
+                    {!isUploading ? (
+                        <div className="flex justify-center">
+                            <button onClick={() => setIsUploading(true)} className="mt-4 text-black underline font-semibold p-2 ">
+                                Cập nhật avatar
+                            </button>
+                        </div>
+
+
+                    ) : (
+                        <>
+
+                            <div className='space-y-4'>
+                                <div className="flex justify-center items-center">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => setFile(e.target.files[0])}
+                                        className='w-40 h-10 '
+                                    />
+                                </div>
+                                <div className="flex justify-center">
+                                    <button onClick={handleUpload} className="ml-2 bg-green-500 text-white p-2 rounded">
+                                        Upload Avatar
+                                    </button>
+                                    <button onClick={() => setIsUploading(false)} className="ml-2 bg-red-500 text-white p-2 rounded">
+                                        Hủy
+                                    </button>
+                                </div>
+                            </div>
+
+                        </>
+                    )}
+                </div>
                 <div className='space-y-4 mt-4'>
-                    <GoShieldCheck size={20}/>
+                    <GoShieldCheck size={20} />
                     <h1 className='font-semibold text-gray-900' >Xác minh danh tính</h1>
                     <p className="text-sm text-gray-600">Xác thực danh tính của bạn với huy hiệu xác minh danh tính</p>
                     <button className="border border-black text-black px-4 py-2 rounded-md"> Nhận huy hiệu </button>
                     <hr className="hidden w-full mt-3 mb-1 border-b border-gray-200 border-opacity-60 sm:block" />
                     <h1 className='font-semibold capitalize text-gray-900' >{userDetails.name} đã xác nhận</h1>
                     <div className='flex space-x-2'>
-                        <GiCheckMark size={20}/>
+                        <GiCheckMark size={20} />
                         <p className="text-sm text-gray-600">Địa chỉ email</p>
                     </div>
                 </div>
 
                 {/* Hiển thị form chỉnh sửa nếu isEditing = true */}
                 {isEditing && (
-                    
+
                     <form className="mt-4 ">
                         <hr className="w-full mt-3 mb-1 border-t border-gray-200 border-opacity-60 " />
                         <h1 className="text-xl font-semibold text-gray-900">Thông tin</h1>
