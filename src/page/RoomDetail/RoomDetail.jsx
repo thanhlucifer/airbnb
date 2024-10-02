@@ -14,6 +14,7 @@ import { GiWashingMachine } from "react-icons/gi";
 import { useSelector } from 'react-redux';
 import { datphongService } from '../../service/datphong.service';
 import { NotificationContext } from '../../App';
+import { ref } from 'yup';
 const RoomDetail = () => {
     const { id } = useParams();
     const [roomDetail, setRoomDetail] = useState(null);
@@ -33,9 +34,10 @@ const RoomDetail = () => {
     const [isBooked, setIsBooked] = useState(false);
     const [bookedRooms, setBookedRooms] = useState([]);
     const { showNotification } = useContext(NotificationContext);
-
+    const tokenUser = useSelector(state => state.authSlide.infoUser?.token);
 
     const infoUser = useSelector((state) => state.authSlide.infoUser);
+
 
     useEffect(() => {
         setLoading(true);
@@ -72,12 +74,12 @@ const RoomDetail = () => {
 
     const handleBookingSubmit = (e) => {
         e.preventDefault();
-    
+
         if (!infoUser) {
             showNotification('Bạn cần đăng nhập để đặt phòng!!!', 'error');
             return;
         }
-    
+
         // Kiểm tra xem phòng đã được đặt trước đó chưa
         const roomExists = bookedRooms.some((room) => {
             // So sánh ID của phòng
@@ -87,7 +89,7 @@ const RoomDetail = () => {
                 const currentEndDate = new Date(endDate);
                 const bookedStartDate = new Date(room.ngayDen);
                 const bookedEndDate = new Date(room.ngayDi);
-    
+
                 // Nếu ngày đến hoặc ngày đi trùng thì không cho đặt phòng
                 return (
                     (currentStartDate <= bookedEndDate && currentEndDate >= bookedStartDate)
@@ -95,12 +97,12 @@ const RoomDetail = () => {
             }
             return false;
         });
-    
+
         if (roomExists) {
             showNotification('Phòng này đã được đặt trong khoảng thời gian này!!!', 'error');
             return;
         }
-    
+
         const bookingData = {
             maPhong: roomDetail.id,
             ngayDen: startDate,
@@ -108,9 +110,9 @@ const RoomDetail = () => {
             soLuongKhach: numGuests,
             maNguoiDung: infoUser.user.id,
         };
-    
+
         setIsBooking(true);
-    
+
         datphongService.postDatphong(bookingData)
             .then((response) => {
                 showNotification('Đặt phòng thành công', 'success');
@@ -124,7 +126,9 @@ const RoomDetail = () => {
                 setIsBooking(false);
             });
     };
-    
+
+
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -153,34 +157,46 @@ const RoomDetail = () => {
         setVisibleComments((prev) => prev + 4);
     };
 
+
+
+
+    const handleSubmitComment = (e) => {
+        e.preventDefault();
+
+
+        const commentData = {
+            maPhong: roomDetail.id,
+            maNguoiBinhLuan: infoUser.user.id,
+            ngayBinhLuan: new Date().toISOString(),
+            noiDung: newComment,
+            saoBinhLuan: newRating
+        };
+
+
+        binhluanService.postBinhluan(tokenUser, commentData)
+            .then(response => {
+                showNotification('Bình luận thành công', 'success');
+                setComments([...comments, response.data.content]);
+                setNewComment('');
+                setNewRating(0);
+            })
+            .catch(error => {
+                console.error('Lỗi khi bình luận:', error);
+                if (error.response) {
+                    console.error('Chi tiết lỗi từ server:', error.response.data);
+                }
+            });
+    };
+
     const handleCommentChange = (e) => {
         setNewComment(e.target.value);
     };
 
     const handleRatingChange = (e) => {
-        setNewRating(e.target.value);
+        setNewRating(Number(e.target.value));
     };
 
-    const handleSubmitComment = (e) => {
-        e.preventDefault();
-        const commentData = {
-            maPhong: id,
-            maNguoiBinhLuan: 1,
-            ngayBinhLuan: new Date().toISOString(),
-            noiDung: newComment,
-            saoBinhLuan: newRating,
-        };
 
-        binhluanService.postBinhluan(commentData)
-            .then(response => {
-                setComments([response.data.content, ...comments]);
-                setNewComment("");
-                setNewRating(0);
-            })
-            .catch(error => {
-                showNotification(error.response.data.content, 'error');
-            });
-    };
 
 
     return (
@@ -318,6 +334,7 @@ const RoomDetail = () => {
                             </button>
                         )}
                     </div>
+
                     {/* Form để thêm bình luận */}
                     <div className='py-5 border-b border-gray-300 hidden sm:block'>
                         <h2 className="text-2xl font-bold mb-4">Thêm bình luận</h2>
@@ -341,6 +358,7 @@ const RoomDetail = () => {
                             <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">Gửi bình luận</button>
                         </form>
                     </div>
+
                 </div>
                 {/* Form đặt phòng */}
                 <div className='sm:mt-4 py-5 border-b border-gray-300 rounded-md shadow-xl px-4 h-min sticky top-40'>
@@ -381,7 +399,7 @@ const RoomDetail = () => {
                             type="submit"
                             className={`bg-[#F72F5B] w-full text-white px-4 py-2 rounded-md transition duration-300 
                 ${isBooking || isBooked ? 'opacity-50 cursor-not-allowed' : 'hover:bg-purple-600'}`}
-                            disabled={isBooking || isBooked} 
+                            disabled={isBooking || isBooked}
                         >
                             {isBooking ? 'Đang đặt...' : isBooked ? 'Đã đặt' : 'Đặt phòng'}
                         </button>
