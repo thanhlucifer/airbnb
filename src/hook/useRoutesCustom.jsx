@@ -12,6 +12,7 @@ import AdminTemplate from '../template/AdminTemplate/AdminTemplate';
 import { Skeleton } from 'antd';
 import AdminPrivateRoute from '../components/AdminPrivateRoute/AdminPrivateRoute';
 import AdminLoginPage from '../page/AdminLoginPage/AdminLoginPage';
+import ManagerBooking from '../page/AdminPage/ManagerBooking/ManagerBooking';
 
 const PageNotFound = React.lazy(() => import('../components/PageNotFound/PageNotFound'));
 const ManagerRoom = React.lazy(() => import('../page/AdminPage/ManagerRoom/ManagerRoom'));
@@ -73,6 +74,10 @@ const useRoutesCustom = () => {
                 {
                     path: 'manager-location',
                     element: <Suspense fallback={<Skeleton />}><ManagerLocation /></Suspense>
+                },
+                {
+                    path:'manager-booking',
+                    element: <Suspense fallback={<Skeleton />}><ManagerBooking/></Suspense>
                 }
             ]
         },

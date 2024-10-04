@@ -403,7 +403,7 @@ const RoomDetail = () => {
                         >
                             {isBooking ? 'Đang đặt...' : isBooked ? 'Đã đặt' : 'Đặt phòng'}
                         </button>
-                        {bookingError && <p className="text-red-500 mt-2">{bookingError}</p>}
+                       
                     </form>
                 </div>
 

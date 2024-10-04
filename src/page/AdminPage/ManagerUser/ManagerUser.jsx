@@ -127,7 +127,7 @@ const ManagerUser = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <button onClick={() => {
+          <Button onClick={() => {
             nguoidungService.deleteUser(record.id).then((res) => {
               console.log(res);
               dispatch(getValueUserApi());
@@ -136,8 +136,8 @@ const ManagerUser = () => {
               console.log(err);
               showNotification(err.response.data.message || err.response.data.content, 'error');
             });
-          }} className="btn bg-red-500 rounded-md py-2 px-2 text-white">Delete</button>
-          <button onClick={() => showEditModal(record)} className="btn bg-yellow-400 rounded-md py-2 px-2">Edit</button>
+          }} className="btn bg-red-500 rounded-md py-2 px-2 text-white">Delete</Button>
+          <Button onClick={() => showEditModal(record)} className="btn bg-yellow-400 rounded-md py-2 px-2">Edit</Button>
         </Space>
       ),
     },

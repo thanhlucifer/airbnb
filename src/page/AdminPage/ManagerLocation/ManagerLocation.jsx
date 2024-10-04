@@ -162,7 +162,7 @@ const ManagerLocation = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <button onClick={() => {
+          <Button onClick={() => {
             viTriService.deleteViTriAdmin(tokenUser,record.id).then((res) => {
               console.log(res);
               dispatch(getViTriApi());
@@ -171,9 +171,9 @@ const ManagerLocation = () => {
               console.log(err);
               showNotification(err.response.data.message || err.response.data.content, 'error');
             });
-          }} className="btn bg-red-500 rounded-md py-2 px-2 text-white">Delete</button>
-          <button onClick={() => showEditModal(record)} className="btn bg-yellow-400 rounded-md py-2 px-2">Edit</button>
-          <button onClick={() => showUploadModal(record)} className="btn bg-blue-400 rounded-md py-2 px-2">Upload hình ảnh</button>
+          }} className="btn bg-red-500 rounded-md py-2 px-2 text-white">Delete</Button>
+          <Button onClick={() => showEditModal(record)} className="btn bg-yellow-400 rounded-md py-2 px-2">Edit</Button>
+          <Button onClick={() => showUploadModal(record)} className="btn bg-blue-400 rounded-md py-2 px-2">Upload hình ảnh</Button>
         </Space>
       ),
     },

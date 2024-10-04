@@ -196,8 +196,8 @@ const ManagerRoom = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <button onClick={() => showDetailModal(record)} className="btn bg-green-400 rounded-md py-2 px-2">Detail</button>
-          <button onClick={() => {
+          <Button onClick={() => showDetailModal(record)} className="btn bg-green-400 rounded-md py-2 px-2">Detail</Button>
+          <Button onClick={() => {
             phongthueService.deletePhongthue(tokenUser, record.id).then((res) => {
               console.log(res);
               dispatch(getPhongthueApi());
@@ -206,9 +206,9 @@ const ManagerRoom = () => {
               console.log(err);
               showNotification(err.response.data.message || err.response.data.content, 'error');
             });
-          }} className="btn bg-red-500 rounded-md py-2 px-2 text-white">Delete</button>
-          <button onClick={() => showEditModal(record)} className="btn bg-yellow-400 rounded-md py-2 px-2">Edit</button>
-          <button onClick={() => showUploadModal(record)} className="btn bg-blue-400 rounded-md py-2 px-2">Upload IMG</button>
+          }} className="btn bg-red-500 rounded-md py-2 px-2 text-white">Delete</Button>
+          <Button onClick={() => showEditModal(record)} className="btn bg-yellow-400 rounded-md py-2 px-2">Edit</Button>
+          <Button onClick={() => showUploadModal(record)} className="btn bg-blue-400 rounded-md py-2 px-2">Upload IMG</Button>
         </Space>
       ),
     },
@@ -387,16 +387,16 @@ const ManagerRoom = () => {
       } open={isDetailModalVisible} onCancel={handleCancelDetail} footer={null}>
         {selectedPhongThueDetail && (
           <div className='space-y-1'>
-            <h2 className='font-bold '> Tên Phòng: <span className='text-sm text-gray-600'>{selectedPhongThueDetail.tenPhong}</span></h2>
-            <p className='font-bold '>Số Khách: <span className='text-sm text-gray-600'>{selectedPhongThueDetail.khach}</span></p>
-            <p className='font-bold '>Số Phòng Ngủ: <span className='text-sm text-gray-600'>{selectedPhongThueDetail.phongNgu}</span></p>
-            <p className='font-bold '>Số Giường: <span className='text-sm text-gray-600'>{selectedPhongThueDetail.giuong}</span></p>
-            <p className='font-bold '>Số Phòng Tắm: <span className='text-sm text-gray-600'>{selectedPhongThueDetail.phongTam}</span></p>
-            <p className='font-bold '>Mô Tả: <span className='text-sm text-gray-600'>{selectedPhongThueDetail.moTa}</span></p>
-            <p className='font-bold '>Giá Tiền: <span className='text-sm text-gray-600'> {selectedPhongThueDetail.giaTien} $</span></p>
+            <h2 className='font-bold '> Tên Phòng: <span className='text-sm text-[#F72F5B]'>{selectedPhongThueDetail.tenPhong}</span></h2>
+            <p className='font-bold '>Số Khách: <span className='text-sm text-[#F72F5B]'>{selectedPhongThueDetail.khach}</span></p>
+            <p className='font-bold '>Số Phòng Ngủ: <span className='text-sm text-[#F72F5B]'>{selectedPhongThueDetail.phongNgu}</span></p>
+            <p className='font-bold '>Số Giường: <span className='text-sm text-[#F72F5B]'>{selectedPhongThueDetail.giuong}</span></p>
+            <p className='font-bold '>Số Phòng Tắm: <span className='text-sm text-[#F72F5B]'>{selectedPhongThueDetail.phongTam}</span></p>
+            <p className='font-bold '>Mô Tả: <span className='text-sm text-[#F72F5B]'>{selectedPhongThueDetail.moTa}</span></p>
+            <p className='font-bold '>Giá Tiền: <span className='text-sm text-[#F72F5B]'> {selectedPhongThueDetail.giaTien} $</span></p>
             <p className='font-bold'>
               Tiện ích:
-              <span className='text-sm text-gray-600'>
+              <span className='text-sm text-[#F72F5B]'>
                 {[
                   selectedPhongThueDetail.mayGiat && 'Máy Giặt',
                   selectedPhongThueDetail.banLa && 'Bàn Là',

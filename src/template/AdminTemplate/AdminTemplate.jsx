@@ -8,7 +8,7 @@ import { Button, Layout, Menu, theme } from 'antd';
 import { Link, Outlet } from 'react-router-dom';
 const { Header, Sider, Content } = Layout;
 import { FaLocationPin } from "react-icons/fa6";
-import { MdRoomPreferences } from "react-icons/md";
+import { MdRoomPreferences, MdBedroomChild  } from "react-icons/md";
 import { SiNginxproxymanager } from "react-icons/si";
 const AdminTemplate = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -40,7 +40,12 @@ const AdminTemplate = () => {
                             key: '3',
                             icon: <MdRoomPreferences />,
                             label: <Link to="/admin/manager-room">Quản lý phòng</Link>,
-                        }
+                        },
+                        {
+                            key: '4',
+                            icon: <MdBedroomChild />,
+                            label: <Link to="/admin/manager-booking">Quản lý đặt phòng</Link>,
+                        },
                     ]}
                 />
             </Sider>
